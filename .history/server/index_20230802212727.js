@@ -1,0 +1,18 @@
+const express = require('express');
+const server = express();
+const cors = require("cors");
+
+const { Technology } = require("../models");
+
+server.use(express.json());
+server.use(express.static(__dirname + "/../public"));
+server.use(cors());
+
+server.get("/api/technologies", async (req, res) => {
+    let technologies = await Technology.find();
+    technologies = technologies.map((technology)=> {
+        technology.logo = `${req.protocol}://${req.headers.host}/img/${technology.logo}`
+    });
+});
+
+module.exports = server; 
